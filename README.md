@@ -14,29 +14,22 @@ JDK 8 / 11 / 17 / 21 四个版本。
 /Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home
 ```
 
-2. 创建一个统一软链接，用于 Alfred 和终端统一管理 JDK：
+2. 环境变量：
+echo 'export JAVA_HOME=/Library/Java/JavaVirtualMachines/CurrentJDK' >> ~/.zshrc
+echo 'export PATH=$JAVA_HOME/bin:$PATH' >> ~/.zshrc
+source ~/.zshrc
 
-```bash
-sudo ln -sfn /Library/Java/JavaVirtualMachines/jdk-11.jdk/Contents/Home /Library/Java/JavaVirtualMachines/CurrentJDK
-```
+## 3. 脚本内容
 
-> 这个软链接会指向当前选择的 JDK，方便 `JAVA_HOME` 统一设置。
+```#!/bin/zsh
 
-## 3. 脚本内容（switch-jdk.sh）
-
-```zsh
-#!/bin/zsh
-
-# 配置已安装 JDK 路径
 JAVA_HOME_8="/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home"
 JAVA_HOME_11="/Library/Java/JavaVirtualMachines/jdk-11.jdk/Contents/Home"
 JAVA_HOME_17="/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home"
 JAVA_HOME_21="/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home"
 
-# Alfred 输入参数
 TARGET="{query}"
 
-# 根据输入选择 JDK
 case "$TARGET" in
   8) LINK=$JAVA_HOME_8; ICON="☕ Java 8";;
   11) LINK=$JAVA_HOME_11; ICON="🟢 Java 11";;
@@ -61,15 +54,11 @@ esac
 
 # 切换软链接
 sudo ln -sfn $LINK /Library/Java/JavaVirtualMachines/CurrentJDK
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/CurrentJDK
+export PATH=$JAVA_HOME/bin:$PATH
 
-# 更新系统环境变量，如果已存在则替换
-sed -i '' '/JAVA_HOME/d' ~/.zshrc
-echo 'export JAVA_HOME=/Library/Java/JavaVirtualMachines/CurrentJDK' >> ~/.zshrc
-echo 'export PATH=$JAVA_HOME/bin:$PATH' >> ~/.zshrc
-
-# 提示 Alfred 已切换
-JAVA_VER=$($LINK/bin/java -version 2>&1 | head -n 1)
-ESC_JAVA_VER=$(echo $JAVA_VER | sed 's/"/\"/g')
+JAVA_VER=$($JAVA_HOME/bin/java -version 2>&1 | head -n 1)
+ESC_JAVA_VER=$(echo $JAVA_VER | sed 's/"/\\"/g')  # 转义双引号
 
 cat <<EOF
 {
@@ -83,6 +72,7 @@ cat <<EOF
   ]
 }
 EOF
+
 ```
 
 > ⚠️ 注意：
@@ -96,19 +86,9 @@ EOF
 ## 4. Alfred Workflow 配置
 JDK Switcher.alfredworkflow拖入Alfred Workflow
 
-4. 连接 **Script Filter** 输出到 **Large Type / Notification**，显示切换结果。
-
 ## 5. 使用方法
 1. 在 Alfred 输入 `jdk 11` → 切换到 JDK 11  
 2. 新开终端，执行 `java -version` → 显示 JDK 11  
 3. 再切换 `jdk 17` → 新终端显示 JDK 17  
 
-## 6. 其他说明
-- 脚本里使用 `sudo ln -sfn` 切换 JDK 软链接，需要输入管理员密码。  
-- `.zshrc` 会追加 `JAVA_HOME`，重复切换可能会有多行，脚本已经使用 `sed` 删除旧的 `JAVA_HOME` 配置以保持整洁。  
-- 如果希望切换立即在当前终端生效，可以执行：
-
-```bash
-source ~/.zshrc
-```
 
