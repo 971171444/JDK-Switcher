@@ -21,7 +21,8 @@ source ~/.zshrc
 
 ## 3. 脚本内容
 
-```#!/bin/zsh
+```
+#!/bin/zsh
 
 JAVA_HOME_8="/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home"
 JAVA_HOME_11="/Library/Java/JavaVirtualMachines/jdk-11.jdk/Contents/Home"
@@ -74,14 +75,6 @@ cat <<EOF
 EOF
 
 ```
-
-> ⚠️ 注意：
-> - 脚本会修改 `~/.zshrc`，确保所有新终端窗口使用切换后的 JDK。
-> - 如果想立即生效，请执行：
->
-> ```bash
-> source ~/.zshrc
-> ```
 
 ## 4. Alfred Workflow 配置
 JDK Switcher.alfredworkflow拖入Alfred Workflow
