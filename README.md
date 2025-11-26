@@ -94,16 +94,7 @@ EOF
 > ```
 
 ## 4. Alfred Workflow 配置
-1. 创建新的 **Workflow**，类型选择 **Script Filter**。  
-2. 输入关键词，例如 `jdk`。  
-3. Script 输入类型选择 `zsh`，内容如下：
-
-```zsh
-/path/to/switch-jdk.sh "{query}"
-```
-
-> 替换 `/path/to/switch-jdk.sh` 为实际脚本路径。  
-> `{query}` 是 Alfred 输入参数，例如 `8`、`11`、`17`、`21`。
+JDK Switcher.alfredworkflow拖入Alfred Workflow
 
 4. 连接 **Script Filter** 输出到 **Large Type / Notification**，显示切换结果。
 
