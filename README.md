@@ -15,8 +15,11 @@ JDK 8 / 11 / 17 / 21 四个版本。
 ```
 
 2. 环境变量：
+```
 echo 'export JAVA_HOME=/Library/Java/JavaVirtualMachines/CurrentJDK' >> ~/.zshrc
 echo 'export PATH=$JAVA_HOME/bin:$PATH' >> ~/.zshrc
+source ~/.zshrc
+```
 source ~/.zshrc
 
 ## 3. 脚本内容
